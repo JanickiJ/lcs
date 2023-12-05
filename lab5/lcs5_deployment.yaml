@@ -1,0 +1,26 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: nginx-deployment
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: nginx
+  template:
+    metadata:
+      labels:
+        app: nginx
+    spec:
+      volumes:
+      - name: lcs-5-nfs-storage
+        persistentVolumeClaim:
+          claimName: test-dynamic-volume-claim
+      containers:
+        - name: nginx-container
+          image: nginx:1.14.2
+          ports:
+          - containerPort: 80
+          volumeMounts:
+          - name: lcs-5-nfs-storage
+            mountPath: /usr/share/nginx/html
